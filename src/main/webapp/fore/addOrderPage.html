@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>TBD</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+</head>
+
+<body class="layui-layout-body">
+    <div class="layui-layout layui-layout-admin">
+        #@temp()
+        <!-- 待克隆的产品选择框 -->
+        <div class="layui-form-item" id="orderItem" hidden>
+
+
+            <label class="layui-form-label">产品种类</label>
+            <div class="layui-inline">
+
+                <select id="screwName" lay-search lay-verify="required" lay-filter="select">
+                    <option value=""></option>
+
+                </select>
+
+            </div>
+            <div class="layui-inline">
+                <input name="price" id="price" type="text" name="title" required lay-verify="required" placeholder="单价"
+                    autocomplete="off" class="layui-input-inline" style="background-color: cornflowerblue;">
+            </div>
+            <div class="layui-inline">
+                <input name="num" id="num" type="text" name="title" required lay-verify="required" placeholder="数量"
+                    autocomplete="off" class="layui-input-inline oninput">
+            </div>
+            <div class="layui-inline">
+                <input name="totalPrice" id="totalPrice" type="text" name="title" required lay-verify="required"
+                    placeholder="价格" autocomplete="off" class="layui-input-inline"
+                    style="background-color: cornflowerblue;">
+            </div>
+
+        </div>
+        <div class="layui-body">
+            <!-- 内容主体区域 -->
+            <div style="padding: 15px;">
+
+                <form class="layui-form" action="">
+
+                    <div class="layui-form-item">
+
+                        <button type="button" class="layui-btn layui-btn-danger" onclick="addOrderItem()">新增订单项</button>
+
+
+                    </div>
+
+                    <!-- 第一条订单项选择框 -->
+                    <div id="orderItem1" name="orderItem" class="layui-form-item">
+
+                        <label class="layui-form-label">产品种类</label>
+                        <div class="layui-inline">
+                            <select id="screwName1" lay-search lay-verify="required" lay-filter="select">
+                                <option value=""></option>
+
+                            </select>
+                        </div>
+                        <div class="layui-inline">
+                            <input name="price" id="price1" type="text" required lay-verify="required" placeholder="单价"
+                                autocomplete="off" class="layui-input-inline" style="background-color: cornflowerblue;">
+                        </div>
+                        <div class="layui-inline">
+                            <input name="num" id="num1" type="text" required lay-verify="required" placeholder="数量"
+                                autocomplete="off" class="layui-input-inline oninput">
+                        </div>
+                        <div class="layui-inline">
+                            <input name="totalPrice" id="totalPrice1" type="text" required lay-verify="required"
+                                placeholder="价格" autocomplete="off" class="layui-input-inline"
+                                style="background-color: cornflowerblue;">
+                        </div>
+
+                    </div>
+
+
+
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">买家</label>
+                        <div class="layui-input-block">
+                            <!-- 买家选择框 -->
+                            <select id="buyerName" name="buyerName" lay-verify="required">
+                                <option value=""></option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">是否结款</label>
+                        <div class="layui-input-block">
+                            <input id="isPaid" lay-filter="radio" type="radio" name="isPaid" value="1" title="是">
+                            <input id="isPaid" lay-filter="radio" type="radio" name="isPaid" value="0" title="否"
+                                checked>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">备注</label>
+                        <div class="layui-input-block">
+                            <textarea id="remark" name="remark" placeholder="请输入备注" class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+                </form>
+
+
+
+
+            </div>
+
+
+        </div>
+
+
+        <div class="layui-footer">
+            <select id="screwName0" lay-search lay-verify="required" lay-filter="select">
+                <option value="99999">9999</option>
+
+            </select>
+            <!-- 底部固定区域 -->
+
+            © layui.com - 底部固定区域
+        </div>
+    </div>
+    <script src="../layui/layui.js"></script>
+
+    <script>
+        //订单项下标
+        var i = 1;
+        //添加订单项
+        function addOrderItem() {
+            i++;
+            var itemId = "orderItem" + i;
+            var orderItem = $("#orderItem").clone(true).attr("id", itemId).attr("name", "orderItem").removeAttr("hidden");
+            $("#orderItem" + (i - 1)).after(orderItem);
+
+            $("#" + itemId).find("select").eq(0).attr("id", "screwName" + i);
+            //单价 input
+            $("#" + itemId).find("input").eq(0).attr("id", "price" + i);
+            //数量 input
+            $("#" + itemId).find("input").eq(1).attr("id", "num" + i);
+            //总价 input
+            $("#" + itemId).find("input").eq(2).attr("id", "totalPrice" + i);
+
+            var select = $("#screwName" + i).get(0);
+            console.log(select);
+            //每次新添一个表单项，都要重新获取产品名称列表，并更新渲染
+            $.ajax({
+                url: '/screw/getScrewNameList',
+                success: function (res) {
+                    for (var index in res) {
+                        var select = $("#screwName" + i).get(0);
+                        select.add(new Option(res[index]));
+
+                    }
+                    //select节点添加完option  必须更新渲染才能显示新的select
+                    layui.use('form', function () {
+                        var form = layui.form;
+                        form.render('select');
+                    });
+                }
+            });
+
+            $("div[name='orderItem']").each(function (i) {
+
+            });
+        }
+
+        layui.use('form', function () {
+            console.log("开始加载表单模块");
+            var form = layui.form;
+
+            form.on('select(select)', function (data) {
+                //console.log(data.elem); //得到select原始DOM对象
+                // console.log(data.value); //得到被选中的值
+                // console.log(data.othis); //得到美化后的DOM对象
+                var name = data.elem.options[data.elem.selectedIndex].innerHTML;
+                // 根据当前select元素 剪切出i值 
+                var index = $(data.elem).attr("id").substr(9);
+                // console.log(index);
+                $.ajax({
+                    url: '/screw/getScrewPrice',
+                    data: { name: name },
+                    success: function (res) {
+                        //给对应产品单价框赋值
+                        $("#price" + index).val(res.price);
+                    }
+                });
+            });
+            // form.on('radio(radio)', function (data) {
+            //     // console.log(data.elem); //得到radio原始DOM对象
+            //     // console.log(data.value); //被点击的radio的value值
+
+            // });
+            //表单提交函数
+            form.on('submit(*)', function (data) {
+                alert("监听到提交");
+                //初始表单数据
+                // var finalData = data.field;
+                // console.log(data.field);
+                //orderItems数组为finalData的orderItems键的值
+                //  {oi:[{单价：，数量：，总价：},{}],买家：，状态：，备注：}
+                var finalData = new Object();
+                var orderItemsArray = new Array();
+
+                alert("制作数据之前");
+                //遍历所有orderItem元素，封装成一个对象，最后加入orderItems数组中
+                $("div[name='orderItem']").each(function (i) {
+                    //    alert("开始制作数据");
+                    //第i个订单项
+                    var index = i + 1;
+
+                    // 取不到该select控件？
+                    var select = $("#screwName" + index).get(0);
+                    console.log(select);
+
+                    //    console.log("1");
+                    // var screwName = select.options[select.selectedIndex].innerHTML;
+                    var name = select.options[select.selectedIndex].innerHTML;
+                    //   console.log("2");
+
+                    var price = $("#price" + index).val();
+                    //   console.log("3");
+                    var num = $("#num" + index).val();
+                    var totalPrice = $("#totalPrice" + index).val();
+                    //每个orderItem对象 加入属性键值对。
+                    var orderItem = { screwName: name, price: price, num: num, totalPrice: totalPrice };
+                    // 再把orderItem对象加入orderItemsArray数组，该数组为finalData对象orderItems键的值
+                    orderItemsArray[i] = orderItem;
+
+                    //   alert("完成制作数据");
+                });
+
+                //  alert("断点1");
+                finalData.orderItems = orderItemsArray;
+                //  alert("断点2");
+                var buyer = $("#buyerName").get(0);
+                //   console.log(buyer);
+                //  alert("断点3");
+                finalData.buyerName = buyer.options[buyer.selectedIndex].innerHTML;
+
+                //  finalData.status = $("#status").val();
+                finalData.remark = $("#remark").val();
+
+                console.log($(":input:checked").val());
+                finalData.status = $(":input:checked").val();
+
+                console.log(finalData);
+                //  alert("ajax前");
+
+
+                $.ajax({
+                    url: '/order/addOrSaveOrder',
+                    method: 'post',
+                    data: JSON.stringify(finalData),
+                    contentType: 'application/json',
+                    success: function (res) {
+                        alert("1");
+                        console.log(res);
+
+                        alert("2");
+                        setTimeout(function () { window.location.href = '/admin/' }, 1000);
+                        layer.msg('添加订单成功', { icon: 1, zIndex: 99999999, time: 2000 });
+                        alert("3");
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("失败");
+                    }
+                });
+                //阻止表单跳转
+                //   return false;
+            });
+
+         
+
+        });
+        //表单模块加载结束
+   //给订单项总价赋值
+   $(function () {
+                //给多个数量栏绑定input事件  on比bind可以多一个子元素选择器
+                // input事件?
+                //数量栏
+                $(".oninput").on("input", function (e) {
+                    console.log("进入函数");
+                    var num = $(this).val();
+                    //第几个订单项的下标
+                    var index = $(this).attr("id").substr(3);
+                    //      console.log(index);
+                    var price = $("#price" + index).val();
+
+                    if (price.length != 0 && num.length != 0) {
+                        console.log("进入if语句");
+                        var totalPrice = price * num;
+                        $("#totalPrice" + index).val(totalPrice);
+                    }
+                    // //获取input输入的值 e.delegateTarget.value等同于this
+                    // console.log(e.delegateTarget.value);
+                });
+            });
+
+
+        function postForm() {
+
+        }
+
+
+
+        $(document).ready(function () {
+            console.log("开始页面加载");
+            //进入页面时给第一个产品框赋值。新增订单项后也要给对应select框赋值
+            $.ajax({
+                url: '/screw/getScrewNameList',
+                success: function (res) {
+                    console.log(res);
+                    for (var i in res) {
+                        var select = $("#screwName1").get(0);
+                        select.add(new Option(res[i]));
+                    }
+                }
+            });
+            //进入页面时给买家选择框赋值买家信息
+            $.ajax({
+                url: '/buyer/getBuyerNameList',
+                success: function (res) {
+                    //  console.log(res);
+                    var select = $("#buyerName").get(0);
+                    for (var i in res) {
+                        select.add(new Option(res[i]));
+                    }
+                }
+            });
+            //在外部尝试用选择器找出select控件 可以打印出
+            // var select = $("#screwName1").get(0);
+            // console.log(select);
+        });
+    </script>
+
+    <script>
+        layui.use('laydate', function () {
+            // 日期模块
+            var laydate = layui.laydate;
+            laydate.render({
+                elem: '#input1'
+                , range: true
+            });
+        });
+    </script>
+</body>
+
+
+</html>

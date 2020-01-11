@@ -1,0 +1,31 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="screw:war exploded">
+    <output-path>$PROJECT_DIR$/target/screw</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="screw" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: com.alibaba:druid:1.0.29" />
+          <element id="library" level="project" name="Maven: it.sauronsoftware.cron4j:cron4j:2.2.5" />
+          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.44" />
+          <element id="library" level="project" name="Maven: com.alibaba:fastjson:1.2.55" />
+          <element id="library" level="project" name="Maven: com.jfinal:jfinal-undertow:2.0" />
+          <element id="library" level="project" name="Maven: io.undertow:undertow-core:2.0.28.Final" />
+          <element id="library" level="project" name="Maven: org.jboss.logging:jboss-logging:3.4.0.Final" />
+          <element id="library" level="project" name="Maven: org.jboss.xnio:xnio-api:3.3.8.Final" />
+          <element id="library" level="project" name="Maven: org.jboss.xnio:xnio-nio:3.3.8.Final" />
+          <element id="library" level="project" name="Maven: io.undertow:undertow-servlet:2.0.28.Final" />
+          <element id="library" level="project" name="Maven: javax.servlet:javax.servlet-api:4.0.1" />
+          <element id="library" level="project" name="Maven: com.jfinal:jfinal:4.8" />
+          <element id="library" level="project" name="Maven: com:hutool:1.0.0" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/target/screw/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="javaee-facet-resources" facet="screw/web/Web" />
+    </root>
+  </artifact>
+</component>

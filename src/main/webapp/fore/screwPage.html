@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>layout 后台大布局 - Layui</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+</head>
+
+<body class="layui-layout-body">
+    <div class="layui-layout layui-layout-admin">
+        #@temp()
+
+        <div class="layui-body">
+            <!-- 内容主体区域 -->
+            <div style="padding: 15px;">
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">产品名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="input2" placeholder="产品名称">
+                    </div>
+                </div>
+                <button type="button" id="button1" class="layui-btn layui-btn-normal layui-btn-radius"
+                    onclick="getTableMessage()">筛选</button>
+
+
+                <button type="button" class="layui-btn layui-btn-danger" onclick="showEditModal()">新增产品</button>
+                <table class="layui-hide" id="table1" lay-filter="table1"></table>
+
+
+
+            </div>
+
+        </div>
+        <div class="modal fade" id="modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+
+                    </div>
+                    <div class="modal-body">
+
+                        <form class="layui-form " action="" id="form1">
+                            <div class="layui-form-item" id="sidDiv">
+                                <label class="layui-form-label">产品ID</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="sid" name="sid" lay-verify="title" autocomplete="off"
+                                        placeholder="" class="layui-input">
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">产品名称</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="name" name="name" lay-verify="title" autocomplete="off"
+                                        placeholder="请输入标题" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">产品规格</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="spec" name="spec" lay-verify="title" autocomplete="off"
+                                        placeholder="请输入标题" class="layui-input">
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">产品单价</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="thousandPerPrice" name="thousandPerPrice" lay-verify="title"
+                                        autocomplete="off" placeholder="请输入标题" class="layui-input">
+                                </div>
+                            </div>
+
+
+                            <div class="layui-form-item layui-form-text">
+                                <label class="layui-form-label">备注</label>
+                                <div class="layui-input-block">
+                                    <textarea id="remark" name="remark" placeholder="请输入内容"
+                                        class="layui-textarea"></textarea>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+
+
+
+        </div>
+
+        <div class="layui-footer">
+            <!-- 底部固定区域 -->
+            © layui.com - 底部固定区域
+        </div>
+    </div>
+
+    <script src="../layui/layui.js"></script>
+<script>
+       Date.prototype.format = function (fmt) {
+            var o = {
+                "M+": this.getMonth() + 1,                 //月份
+                "d+": this.getDate(),                    //日
+                "h+": this.getHours(),                   //小时
+                "m+": this.getMinutes(),                 //分
+                "s+": this.getSeconds(),                 //秒
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                "S": this.getMilliseconds()             //毫秒
+            };
+
+            if (/(y+)/.test(fmt)) {
+                fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            }
+
+            for (var k in o) {
+                if (new RegExp("(" + k + ")").test(fmt)) {
+                    fmt = fmt.replace(
+                        RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                }
+            }
+
+            return fmt;
+        }
+</script>
+    <script type="text/javascript">
+
+        layui.use(['table', 'laydate', 'form'], function () {
+            var table = layui.table;
+            //  var status = $("#place").find("option:selected").val();
+            table.render({
+                elem: '#table1'
+                , url: '/screw/getScrewList'
+                , cols: [[
+                    { field: 'sid', title: '编号', sort: true }
+
+
+                    , { field: 'name', title: '名称' }
+                    , { field: 'spec', title: '规格' }
+                    , { field: 'thousandPerPrice', title: '单价', sort: true }
+
+                    , { field: 'remark', title: '备注' }
+                    , { field: 'toolbar', title: '工具栏', width: 330, toolbar: '#editOrDelete' }
+                    , { field: 'totalPrice', title: '销售金额', sort: true }
+                ]]
+                // , parseData: function (res) { //res 即为原始返回的数据
+                //   return {
+                //     "code": res.code, //解析接口状态
+                //     "msg": res.msg, //解析提示文本
+                //     "count": res.count, //解析数据长度
+                //     "data": res.data //解析数据列表
+                //   };
+                // }
+                , page: true
+            });
+            //表格行工具栏监听
+            table.on('tool(table1)', function (obj) {
+                var event = obj.event;// lay-event 对应的值
+                var data = obj.data; //当前行数据
+                var tr = obj.tr; //当前行 tr 的 DOM 对象
+                var sid = obj.data.sid;
+                var name=obj.data.name;
+                if (event === 'edit') {
+                    console.log(obj.data);
+
+                    var name = obj.data.name;
+                    var spec = obj.data.spec;
+                    var thousandPerPrice = obj.data.thousandPerPrice;
+                    var remark = obj.data.remark;
+
+                    showEditModal(sid, name, spec, thousandPerPrice, remark);
+
+
+                } else if (event === 'del') {
+                    layer.confirm('确定删除？', {
+                        btn: ['确定', '取消']
+                    }, function (index) {
+                        $.ajax({
+                            url: '/screw/deleteScrew?sid=' + sid
+                            , success: function (res) {
+                                if (res.status == 200) {
+                                    layer.msg('删除成功', { icon: 1 });
+                                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                                    layer.close(index); //?
+                                } else {
+                                    layer.msg('删除失败', { icon: 1 });
+                                }
+                            }
+
+                        });
+                    });
+                    //查看相关订单
+                } else if (event == 'queryOrderListByCondition') {
+                    
+                    //查看单个产品分析
+                } else if (event == 'queryScrewAnalyze') {
+                    //跳转带sid
+                   
+                  var date=new Date().format("yyyy-MM");
+                  
+                    
+                    window.location.href = '/admin/screwAnalyzeByTime?date=' + date + '&sid=' + sid+'&name='+name;
+                }
+            });
+
+            var form = layui.form;
+            //添加/编辑表单提交时
+            form.on('submit(formDemo)', function (data) {
+                console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+                console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+                console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+
+                var strData = JSON.stringify(data.field);
+                console.log(strData);
+
+                layer.confirm('确定操作？', {
+                    btn: ['确定', '取消']
+                }, function (index) {
+                    $.ajax({
+                        url: '/screw/addOrSaveScrew'
+                        , data: strData
+                        , method: 'post'
+                        , contentType: 'application/json'
+                        , success: function (res) {
+                            console.log(res.status);
+                            //添加操作回调
+                            if (res.action == "add") {
+                                if (res.status == 200) {
+                                    layer.msg('添加成功', { icon: 1 });
+                                    //   form.render(null, 'form1'); 
+                                    setTimeout(function () { window.location.href = '/admin/screwPage' }, 1000);
+
+                                } else {
+                                    layer.msg('添加失败', { icon: 1 });
+                                }
+                                //编辑操作回调
+                            } else if (res.action == "edit") {
+                                if (res.status == 200) {
+                                    layer.msg('编辑成功', { icon: 1 });
+                                    //   form.render(null, 'form1'); 
+                                    setTimeout(function () { window.location.href = '/admin/screwPage' }, 1000);
+
+                                } else {
+                                    layer.msg('编辑失败', { icon: 1 });
+                                }
+                            }
+
+
+                            //    setTimeout(function(){window.location.href='/admin/buyerPage'},1000);
+                        }
+
+                    });
+                });
+
+                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+
+            });
+ // 日期模块
+ var laydate = layui.laydate;
+            laydate.render({
+                elem: '#input1'
+                , range: true
+            });
+
+        });
+
+    </script>
+    <script type="text/html" id="editOrDelete">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="queryOrderListByCondition">查看相关订单</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="queryScrewAnalyze">销售额统计图</a>
+      
+      </script>
+    <script type="text/javascript">
+     
+        function showAddModal() {
+            //去除表单编号框，否则表单提交时会出现自增的bid键（后端以是否有bid键来判断编辑/添加操作）
+            $("#sidDiv").remove();
+
+            $("#name").val("");
+            $("#spec").val("");
+            $("#thousandPerPrice").val("");
+            $("#remark").val("");
+            $("#modal").modal('show');
+
+        }
+        //展示编辑框
+        function showEditModal(sid, name, spec, thousandPerPrice, remark) {
+            //隐藏编号框，同时赋值相应bid（后端以是否有bid键来判断编辑/添加操作）
+            $("#sidDiv").hide();
+            $("#sid").val(sid);
+
+            $("#name").val(name);
+            $("#spec").val(spec);
+            $("#thousandPerPrice").val(thousandPerPrice);
+            $("#remark").val(remark);
+            $("#modal").modal('show');
+
+        }
+
+        //根据查询条件重新组装table
+        function getTableMessage() {
+            var table = layui.table;
+            // var status = $("#place").find("option:selected").val();
+            // var time = $("#input1").val();
+            // var buyerName = $("#input2").val();
+            var name = $("#input2").val();
+            layui.use('table', function () {
+                table.render({
+                    elem: '#table1'
+                    , url: '/screw/getScrewList?name=' + name
+                    , cols: [[
+                        { field: 'sid', title: '编号', sort: true }
+
+
+                        , { field: 'name', title: '名称' }
+                        , { field: 'spec', title: '规格' }
+                        , { field: 'thousandPerPrice', title: '创建时间', sort: true }
+
+                        , { field: 'remark', title: '备注' }
+                        , { field: 'toolbar', title: '工具栏', width: 330, toolbar: '#editOrDelete' }
+                        , { field: 'totalPrice', title: '销售金额', sort: true }
+                    ]]
+                    , page: true
+                });
+            });
+
+        }
+
+    </script>
+
+</body>
+
+
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>layout 后台大布局 - Layui</title>
+  <link rel="stylesheet" href="../layui/css/layui.css">
+  <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+
+</head>
+
+<body class="layui-layout-body">
+  <div class="layui-layout layui-layout-admin">
+    #@temp()
+
+    <div class="layui-body">
+      <!-- 内容主体区域 -->
+      <div style="padding: 15px;">
+
+        <!-- <div class="layui-inline">
+          <label class="layui-form-label">结款</label>
+          <select id="place" name="place" onchange="getTableMessage()" class="input-sm form-control "
+            style="width: 200px;height: 34px">
+            <option value="">全部</option>
+            <option value="1">已结款</option>
+            <option value="0">未结款</option>
+
+          </select>
+        </div> -->
+
+        <!-- <div class="layui-inline">
+          <label class="layui-form-label">日期</label>
+          <div class="layui-input-inline">
+            <input type="text" class="layui-input" id="input1" placeholder="yyyy-MM-dd">
+          </div>
+        </div> -->
+
+        <div class="layui-inline">
+          <label class="layui-form-label">买家</label>
+          <div class="layui-input-inline">
+            <input type="text" class="layui-input" id="input2" placeholder="买家名称">
+          </div>
+        </div>
+        <button type="button" id="button1" class="layui-btn layui-btn-normal layui-btn-radius"
+          onclick="getTableMessage()">筛选</button>
+
+
+        <button type="button" class="layui-btn layui-btn-danger" onclick="showAddModal();">新增买家</button>
+        <table class="layui-hide" id="table1" lay-filter="table1"></table>
+
+
+
+      </div>
+    </div>
+    <div class="modal fade" id="modal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+
+          </div>
+          <div class="modal-body">
+
+            <form class="layui-form " action="" id="form1" lay-filter="form1">
+              <div class="layui-form-item" id="bidDiv">
+                <label class="layui-form-label">编号</label>
+                <div class="layui-input-block">
+                  <input type="text" id="bid" name="bid"  autocomplete="off" placeholder="请输入标题"
+                    class="layui-input">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">买家名称</label>
+                <div class="layui-input-block">
+                  <input type="text" id="buyerName" name="buyerName" lay-verify="required" autocomplete="off" placeholder="请输入标题"
+                    class="layui-input">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">地址</label>
+                <div class="layui-input-block">
+                  <input type="text" id="address" name="address" lay-verify="required" autocomplete="off" placeholder="请输入标题"
+                    class="layui-input">
+                </div>
+              </div>
+
+              <div class="layui-form-item">
+                <label class="layui-form-label">联系电话</label>
+                <div class="layui-input-block">
+                  <input type="text" id="mobile"name="mobile" lay-verify="required" autocomplete="off" placeholder="请输入标题"
+                    class="layui-input">
+                </div>
+              </div>
+
+
+              <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                  <textarea id="remark" name="remark" placeholder="请输入内容" class="layui-textarea"></textarea>
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <div class="layui-input-block">
+                  <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                  <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+              </div>
+            </form>
+
+          </div>
+          <div class="modal-footer">
+
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal -->
+
+
+    </div>
+    <div class="layui-footer">
+      <!-- 底部固定区域 -->
+      © layui.com - 底部固定区域
+    </div>
+  </div>
+
+  <script src="../layui/layui.js"></script>
+
+  <script type="text/javascript">
+
+    layui.use(['table', 'laydate', 'form'], function () {
+      var table = layui.table;
+      //  var status = $("#place").find("option:selected").val();
+      table.render({
+        elem: '#table1'
+        , url: '/buyer/getBuyerList'
+        , toolbar: '#toolbarDemo'
+        , defaultToolbar: ['filter', 'exports', 'print']
+        , cols: [[
+          { type: 'checkbox', fixed: 'left' }
+          , { field: 'bid', title: '编号', sort: true }
+          // , { field: 'orderitem', title: '订单项的产品、单价、数量' }
+
+          , { field: 'buyerName', title: '买家名称' }
+          , { field: 'address', title: '地址' }
+          , { field: 'mobile', title: '联系电话' }
+
+          , { field: 'toolbar', title: '工具栏',width:200,toolbar: '#editOrDelete' }
+          //   , { field: 'toolbar', title: '相关订单', toolbar: '' }
+          , { field: 'totalPrice', title: '来往金额', sort: true }
+          , { field: 'remark', title: '备注' }
+        ]]
+        // , parseData: function (res) { //res 即为原始返回的数据
+        //   return {
+        //     "code": res.code, //解析接口状态
+        //     "msg": res.msg, //解析提示文本
+        //     "count": res.count, //解析数据长度
+        //     "data": res.data //解析数据列表
+        //   };
+        // }
+        , page: true
+      });
+
+      table.on('tool(table1)', function (obj) {
+        var event = obj.event;// lay-event 对应的值
+        var data = obj.data; //当前行数据
+        var tr = obj.tr; //当前行 tr 的 DOM 对象
+        var bid = data.bid;
+        //编辑框
+        if (event === 'edit') {
+          console.log(obj.data);
+          var bid=obj.data.bid;
+          var buyerName=obj.data.buyerName;
+          var address=obj.data.address;
+          var mobile=obj.data.mobile;
+          var remark=obj.data.remark;
+
+          showEditModal(bid,buyerName,address,mobile,remark);
+          //  showEditModal();
+ 
+
+        } else if (event === 'del') {
+          layer.confirm('确定删除？', {
+            btn: ['确定', '取消']
+          }, function (index) {
+            //  console.log(bid);
+            $.ajax({
+              url: '/buyer/deleteBuyerByBid?bid=' + bid
+              , success: function (res) {
+                if (res.status == 200) {
+                  layer.msg('删除成功', { icon: 1 });
+                  obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                  layer.close(index); //?
+                } else {
+                  layer.msg('删除失败', { icon: 1 });
+                }
+              }
+
+            });
+          });
+        } else if (event == 'queryOrderListByCondition') {
+          //查看相关订单
+        }
+      });
+
+      // 日期模块
+      var laydate = layui.laydate;
+      laydate.render({
+        elem: '#input1'
+        , range: true
+      });
+
+      var form = layui.form;
+      //添加/编辑表单提交时
+      form.on('submit(formDemo)', function (data) {
+        console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+        console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+        console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+
+        
+        
+        var strData = JSON.stringify(data.field);
+        console.log(strData);
+
+        layer.confirm('确定操作？', {
+          btn: ['确定', '取消']
+        }, function (index) {
+          $.ajax({
+            url: '/buyer/addOrSaveBuyer'
+            , data: strData
+            , method: 'post'
+            , contentType: 'application/json'
+            , success: function (res) {
+              console.log(res.status);
+              //添加操作回调
+              if (res.action == "add") {
+                if (res.status == 200) {
+                  layer.msg('添加成功', { icon: 1 });
+                  //   form.render(null, 'form1'); 
+
+
+                } else {
+                  layer.msg('添加失败', { icon: 1 });
+                }
+              //编辑操作回调
+              } else if (res.action == "edit") {
+                if (res.status == 200) {
+                  layer.msg('编辑成功', { icon: 1 });
+                  //   form.render(null, 'form1'); 
+                 
+
+                } else {
+                  layer.msg('编辑失败', { icon: 1 });
+                }
+              }
+
+
+              //    setTimeout(function(){window.location.href='/admin/buyerPage'},1000);
+            }
+
+          });
+        });
+
+        return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+
+      });
+
+    });
+
+  </script>
+  <script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+      <!-- <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+      <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+      <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button> -->
+    </div>
+  </script>
+  <script type="text/html" id="editOrDelete">
+  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="queryOrderListByCondition">查看相关订单</a>
+  
+
+</script>
+  <script type="text/javascript">
+    // 展示新增框
+    function showAddModal() {
+       //去除表单编号框，否则表单提交时会出现自增的bid键（后端以是否有bid键来判断编辑/添加操作）
+      $("#bidDiv").remove();
+
+      $("#buyerName").val("");
+        $("#mobile").val("");
+        $("#address").val("");
+        $("#remark").val("");
+       $("#modal").modal('show');
+
+    }
+    //展示编辑框
+    function showEditModal(bid,buyerName,address,mobile,remark) {
+      //隐藏编号框，同时赋值相应bid（后端以是否有bid键来判断编辑/添加操作）
+      $("#bidDiv").hide();
+      $("#bid").val(bid);
+       
+        $("#buyerName").val(buyerName);
+        $("#mobile").val(mobile);
+        $("#address").val(address);
+        $("#remark").val(remark);
+       $("#modal").modal('show');
+
+}
+
+    //根据查询条件重新组装table
+    function getTableMessage() {
+      var table = layui.table;
+      //   var status = $("#place").find("option:selected").val();
+      //   var time = $("#input1").val();
+      var buyerName = $("#input2").val();
+      console.log(buyerName);
+      layui.use('table', function () {
+        table.render({
+        elem: '#table1'
+        , url: '/buyer/getBuyerList?buyerName='+buyerName
+        , toolbar: '#toolbarDemo'
+        
+        , defaultToolbar: ['filter', 'exports', 'print']
+        , cols: [[
+          { type: 'checkbox', fixed: 'left' }
+          , { field: 'bid', title: '编号', sort: true }
+          // , { field: 'orderitem', title: '订单项的产品、单价、数量' }
+
+          , { field: 'buyerName', title: '买家名称' }
+          , { field: 'address', title: '地址' }
+          , { field: 'mobile', title: '联系电话' }
+
+          , { field: 'toolbar', title: '工具栏',width:200,toolbar: '#editOrDelete' }
+          //   , { field: 'toolbar', title: '相关订单', toolbar: '' }
+          , { field: 'totalPrice', title: '来往金额', sort: true }
+          , { field: 'remark', title: '备注' }
+        ]]
+        // , parseData: function (res) { //res 即为原始返回的数据
+        //   return {
+        //     "code": res.code, //解析接口状态
+        //     "msg": res.msg, //解析提示文本
+        //     "count": res.count, //解析数据长度
+        //     "data": res.data //解析数据列表
+        //   };
+        // }
+        , page: true
+      });
+    });
+    }
+  </script>
+
+</body>
+
+
+</html>

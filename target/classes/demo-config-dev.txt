@@ -1,0 +1,5 @@
+# config
+jdbcUrl = jdbc:mysql://localhost/screw?characterEncoding=utf8&useSSL=false&zeroDateTimeBehavior=convertToNull
+user = root
+password = admin
+devMode = true
