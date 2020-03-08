@@ -27,17 +27,18 @@ public class BuyerService {
         String remark = jsonObject.getString("remark");
 
         JSONObject result=new JSONObject();
+        //编辑买家
         if (jsonObject.getInteger("bid") != null) {
             result.put("action","edit");
             int  bid=jsonObject.getInteger("bid");
 
-            List<String> buyerNameList= Db.query("select buyerName from buyer");
             Buyer buyer = dao.findById(bid);
             buyer.setBuyerName(buyerName);
             buyer.setAddress(address);
             buyer.setMobile(mobile);
             buyer.setRemark(remark);
 
+            List<String> buyerNameList= Db.query("select buyerName from buyer");
             String currentBuyerName=buyer.getBuyerName();
             //编辑时买家名称不能与其他买家名称相同（可以与原来名称相同）
             if(buyerNameList.contains(buyerName)&&!buyerName.equals(currentBuyerName)){
@@ -45,15 +46,15 @@ public class BuyerService {
                 return result;
             }
 
-
-
             if(buyer.update()){
                 result.put("status",200);
             }else{
                 result.put("status",404);
             }
             return result;
-        } else {
+        }
+        //添加买家
+        else {
             result.put("action","add");
             List<String> buyerNameList= Db.query("select buyerName from buyer");
 
@@ -79,30 +80,26 @@ public class BuyerService {
     public String getBuyerNameList() {
         List<String> list = Db.query("select buyerName from buyer order by bid");
         String jsonString = JSON.toJSONString(list);
+       // System.out.println(jsonString);
         return jsonString;
     }
 
     public JSONObject getBuyerList(String buyerName) {
         List<Record> resultList=null;
-       if(buyerName==null) {
-            resultList = Db.find(Db.getSql("buyer.queryBuyerList"));
-       }else{
-           // 必须用map,因为sql语句中模板引擎#(buyerName)需要识别取值，用Object paras无法识别
-            resultList = Db.find(Db.getSqlPara("buyer.queryBuyerList", Kv.by("buyerName",buyerName)));
-       }
-        // String  jsonString = JSON.toJSONString(list);
-        //jfinal必须用以下方法转换list为json字符串！
-        String jsonString = FastJson.getJson().toJson(resultList);
-       System.out.println(resultList);
-        JSONArray jsonArray = JSONArray.parseArray(jsonString);
+        // 必须用map,因为sql语句中模板引擎#(buyerName)需要识别取值，用Object paras无法识别
+        resultList=buyerName==null? Db.find(Db.getSql("buyer.queryBuyerList")):Db.find(Db.getSqlPara("buyer.queryBuyerList", Kv.by("buyerName",buyerName)));
+
+         System.out.println(resultList);
+        // String jsonString = FastJson.getJson().toJson(resultList);
+       // JSONArray jsonArray = JSONArray.parseArray(jsonString);
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", 0);
         jsonObject.put("msg", "");
         jsonObject.put("count", 1000);
-        jsonObject.put("data", jsonArray);
-      //  FastJson.getJson().toJson(resultList);
+        jsonObject.put("data", resultList);
 
+     //System.out.println(jsonObject);
         return jsonObject;
     }
   //删除买家信息  需先删除相关订单项和订单
@@ -111,7 +108,7 @@ public class BuyerService {
         List<Integer> orderIds = Db.query("select oid from orders where orders.bid=?", bid);
         List<Integer> allOrderItemIds = new ArrayList<>();
         orderIds.forEach((oid) -> {
-            List<Integer> orderItemIds = Db.query("select orderItemId from orderitem where orderitem.orderItemId=?", oid);
+            List<Integer> orderItemIds = Db.query("select orderItemId from orderitem where orderitem.oid=?", oid);
             allOrderItemIds.addAll(orderItemIds);
         });
         orderIds.forEach((id)->{

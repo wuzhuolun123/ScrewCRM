@@ -24,6 +24,7 @@ public class ScrewAnalyzeService {
 //                resultList.forEach((record)->{record.set("xAxis",i);});
 //            case "month":
 //        }
+
         String jsonString = FastJson.getJson().toJson(resultList);
         JSONArray jsonArray = JSONArray.parseArray(jsonString);
         JSONObject jsonObject = new JSONObject();

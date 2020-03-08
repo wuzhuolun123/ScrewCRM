@@ -16,16 +16,19 @@ import java.util.List;
 import static com.alibaba.fastjson.JSON.toJSONString;
 
 public class ScrewService {
+
     public static final Screw dao = new Screw();
 
     public JSONObject addOrSaveScrew(String screwData){
      JSONObject jsonObject=JSONObject.parseObject(screwData);
        String name= jsonObject.getString("name");
        String spec= jsonObject.getString("spec");
-    String thousandPerPriceStr= jsonObject.getString("thousandPerPrice");
-     float  thousandPerPrice=Float.valueOf(thousandPerPriceStr);
-      String remark=  jsonObject.getString("remark");
-    JSONObject result=new JSONObject();
+       String thousandPerPriceStr= jsonObject.getString("thousandPerPrice");
+       String remark=  jsonObject.getString("remark");
+
+       float  thousandPerPrice=Float.valueOf(thousandPerPriceStr);
+       JSONObject result=new JSONObject();
+       //添加产品
       if(jsonObject.getInteger("sid")==null){
           result.put("action","add");
 
@@ -42,6 +45,7 @@ public class ScrewService {
             if(screw.save()) {
                 result.put("status",200);
             }
+         //编辑产品
           } else{
           result.put("action","edit");
 

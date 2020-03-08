@@ -1,0 +1,75 @@
+
+#define temp()
+<div class="layui-header">
+    <div class="layui-logo">TBD</div>
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+    <ul class="layui-nav layui-layout-left">
+        <li class="layui-nav-item"><a href="/admin/addOrderPage">新增订单</a></li>
+        <li class="layui-nav-item"><a href="">商品管理</a></li>
+        <li class="layui-nav-item"><a href="">用户</a></li>
+        <li class="layui-nav-item">
+            <a href="javascript:;">其它系统</a>
+            <dl class="layui-nav-child">
+                <dd><a href="">邮件管理</a></dd>
+                <dd><a href="">消息管理</a></dd>
+                <dd><a href="">授权管理</a></dd>
+            </dl>
+        </li>
+    </ul>
+    <ul class="layui-nav layui-layout-right">
+        <li class="layui-nav-item">
+            <a href="javascript:;">
+                <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                用户名 
+            </a>
+            <dl class="layui-nav-child">
+                <dd><a href="">基本资料</a></dd>
+                <dd><a href="">安全设置</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item"><a href="/admin/logout">退出登录</a></li>
+    </ul>
+</div>
+
+<div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+        <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+        <ul class="layui-nav layui-nav-tree" lay-filter="test">
+            <li class="layui-nav-item layui-nav-itemed">
+                <a class="" href="javascript:;">管理中心</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="/admin">订单管理</a></dd>
+                    <dd><a href="/admin/screwPage">产品管理</a></dd>
+                    <dd><a href="/admin/buyerPage">买家管理</a></dd>
+
+                </dl>
+            </li>
+            <li class="layui-nav-item layui-nav-itemed">
+                <a href="">产品分析</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="/admin/screwAnalyzeByTime?date=2020-01&sid=4&name=沉头">单产品分析</a></dd>
+                    <dd><a href="/admin/screwAnalyzeByBuyer">单产品每日/月/年买家排行</a></dd>
+                    <dd><a href="/admin/screwListAnalyzeByTime">产品集合每日/月/年排行</a></dd>
+
+                </dl>
+            </li>
+            <li class="layui-nav-item layui-nav-itemed">
+                <a href="">订单分析</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="/admin/orderAnalyzeByTime">订单每日/月/年排行</a></dd>
+                    <dd><a href="">待定</a></dd>
+
+                </dl>
+            </li>
+            <li class="layui-nav-item layui-nav-itemed">
+                <a href="">买家分析</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="/admin/buyerAnalyzeByTime">买家每日/月/年排行</a></dd>
+                    <dd><a href="">待定</a></dd>
+
+                </dl>
+            </li>
+        </ul>
+    </div>
+</div>
+#end

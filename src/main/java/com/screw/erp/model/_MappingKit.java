@@ -16,10 +16,14 @@ import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 public class _MappingKit {
 	
 	public static void mapping(ActiveRecordPlugin arp) {
+		arp.addMapping("account", "id", Account.class);
+		// Composite Primary Key order: accountId,roleId
+		arp.addMapping("account_role", "accountId,roleId", AccountRole.class);
 		arp.addMapping("buyer", "bid", Buyer.class);
 		arp.addMapping("orderitem", "orderItemId", Orderitem.class);
 		arp.addMapping("orders", "oid", Orders.class);
 		arp.addMapping("screw", "sid", Screw.class);
+		arp.addMapping("session", "id", Session.class);
 		arp.addMapping("user", "id", User.class);
 	}
 }

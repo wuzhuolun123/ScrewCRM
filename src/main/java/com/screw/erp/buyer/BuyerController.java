@@ -11,26 +11,23 @@ import java.util.Map;
 public class BuyerController extends Controller {
     @Inject
     BuyerService buyerService;
+
+    //添加或编辑买家
     public void addOrSaveBuyer(){
         String newBuyer = HttpKit.readData(getRequest());
-       JSONObject jsonObject = JSON.parseObject(newBuyer);
-      renderJson(buyerService.addOrSaveBuyer(jsonObject));
-
+        JSONObject jsonObject = JSON.parseObject(newBuyer);
+        renderJson(buyerService.addOrSaveBuyer(jsonObject));
     }
-//添加订单时 自动渲染买家名称下拉框时调用
+   //添加订单时 渲染买家选择框
     public void getBuyerNameList() {
-
-
         renderJson(buyerService.getBuyerNameList());
     }
    //筛选买家信息，渲染买家表格
     public void getBuyerList() {
-      String buyerName=null;
-      if(getPara("buyerName")!=null){
-          buyerName=getPara("buyerName");
-      }
+        String buyerName=getPara("buyerName")==null?null:getPara("buyerName");
         renderJson(buyerService.getBuyerList(buyerName));
     }
+    //删除买家
     public void deleteBuyerByBid() {
       int bid= getParaToInt("bid");
         if (buyerService.deleteBuyerByBid(bid)) {

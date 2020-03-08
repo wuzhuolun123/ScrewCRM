@@ -2,6 +2,7 @@ package com.screw.common;
 
 
 import com.jfinal.config.*;
+import com.jfinal.core.JFinal;
 import com.jfinal.ext.interceptor.SessionInViewInterceptor;
 import com.jfinal.json.FastJsonFactory;
 import com.jfinal.kit.Prop;
@@ -9,12 +10,16 @@ import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.cron4j.Cron4jPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
+import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.server.undertow.UndertowServer;
 import com.jfinal.template.Engine;
+import com.screw.erp.Interceptor.LoginInterceptor;
 import com.screw.erp.buyer.BuyerController;
 import com.screw.erp.fore.ForeController;
+import com.screw.erp.login.LoginController;
 import com.screw.erp.model._MappingKit;
 import com.screw.erp.order.OrderController;
+import com.screw.erp.register.registerController;
 import com.screw.erp.screw.ScrewAnalyzeController;
 import com.screw.erp.screw.ScrewController;
 
@@ -72,16 +77,20 @@ public class ScrewConfig extends JFinalConfig {
       //  me.add("/", IndexController.class, "/index");	// 第三个参数为该Controller的视图存放路径
         //me.add("/blog", BlogController.class);			// 第三个参数省略时默认与第一个参数值相同，在此即为 "/blog"
         me.add("/admin", ForeController.class);
+        me.add("/login", LoginController.class);
         me.add("/screw", ScrewController.class);
         me.add("/buyer", BuyerController.class);
         me.add("/order", OrderController.class);
         me.add("/screwAnalyze", ScrewAnalyzeController.class);
+        me.add("/register", registerController.class);
+
 
     }
 
     public void configEngine(Engine me) {
      //   me.addSharedFunction("/common/_layout.html");
-       me.addSharedFunction("/fore/leftAndTopPage.html");
+       me.addSharedFunction("/fore/common/leftAndTopPage.html");
+        me.addSharedObject("context", JFinal.me().getContextPath());
         me.setDevMode(true);
 
     }
@@ -101,10 +110,12 @@ public class ScrewConfig extends JFinalConfig {
         arp.addSqlTemplate("/template/buyer.sql");
         arp.addSqlTemplate("/template/orderItem.sql");
         arp.addSqlTemplate("/template/screw.sql");
-        arp.setShowSql(true);
+//        arp.setShowSql(true);
 
-        _MappingKit.mapping(arp);
         me.add(arp);
+        _MappingKit.mapping(arp);
+
+        me.add(new EhCachePlugin());
 
         Cron4jPlugin cp=new Cron4jPlugin();
         //任务1
@@ -124,6 +135,7 @@ public class ScrewConfig extends JFinalConfig {
      */
     public void configInterceptor(Interceptors me) {
         me.add(new SessionInViewInterceptor(true));
+me.add(new LoginInterceptor());
 
     }
 

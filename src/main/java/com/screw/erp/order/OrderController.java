@@ -22,9 +22,12 @@ public class OrderController extends Controller {
 
     public void addOrSaveOrder() {
         String data = HttpKit.readData(getRequest());
+
+        //string和list的区别？
         System.out.println(data);
       //将json字符串转为json对象
         JSONObject dataFromFront = JSON.parseObject(data, JSONObject.class);
+       System.out.println(dataFromFront);
 
         JSONArray orderItemsArray= dataFromFront.getJSONArray("orderItems");
         String buyerName = dataFromFront.getString("buyerName");

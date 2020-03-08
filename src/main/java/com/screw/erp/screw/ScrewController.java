@@ -23,7 +23,6 @@ public class ScrewController extends Controller {
     }
 
     public void getScrewNameList() {
-       //json字符串到了前端会自动变为json数组?
         renderJson(screwService.getScrewNameList());
     }
   //添加订单项产品时自动赋值
@@ -32,6 +31,7 @@ public class ScrewController extends Controller {
         set("price", screwService.getScrewPrice(name));
         renderJson();
     }
+    //删除产品
     public  void deleteScrew(){
          int sid=getParaToInt("sid");
         renderJson(screwService.deleteScrew(sid));

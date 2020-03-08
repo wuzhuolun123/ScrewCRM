@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="http://localhost:8000/CLodopFuncs.js"></script>
+    <script src="LodopFuncs.js"></script>
+    
+<object  id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0> 
+       <embed id="LODOP_EM" type="application/x-print-lodop" width=0 height=0></embed>
+</object>
+</head>
+
+<body>
+    
+
+    <script>
+        var LODOP;
+
+    function print(){
+         LODOP=getLodop();
+    LODOP.PRINT_INITA(2,-1,800,600,"打印控件功能演示_Lodop功能_装载背景图");
+    LODOP.SET_PRINT_MODE("PRINT_NOCOLLATE",1);
+    LODOP.ADD_PRINT_SETUP_BKIMG("C:\\Users\\windows\\Desktop\\mode3.jpg");
+    LODOP.ADD_PRINT_TEXT(83,78,75,20,"寄件人姓名");
+    LODOP.ADD_PRINT_TEXT(109,137,194,20,"寄件人单位名称");
+    LODOP.ADD_PRINT_TEXT(134,90,238,35,"寄件人的详细地址");
+    LODOP.ADD_PRINT_TEXT(85,391,75,20,"收件人姓名");
+    LODOP.ADD_PRINT_TEXT(108,440,208,20,"收件人单位名称");
+    LODOP.ADD_PRINT_TEXT(137,403,244,35,"收件人详细地址");
+    LODOP.ADD_PRINT_TEXT(252,33,164,40,"内件品名");
+    LODOP.ADD_PRINT_TEXT(261,221,100,20,"内件数量");
+    LODOP.ADD_PRINT_TEXT(83,212,100,20,"寄件人电话");
+    LODOP.ADD_PRINT_TEXT(80,554,75,20,"收件人电话");
+    LODOP.PRINT();   
+    }
+</script>
+</body>
+
+</html>

@@ -59,8 +59,8 @@ public class OrderService {
         String jsonString= FastJson.getJson().toJson(orderList);
 
         JSONArray jsonArray = JSONArray.parseArray(jsonString);
-        System.out.println(orderList);
-        System.out.println(jsonArray);
+//        System.out.println(orderList);
+//        System.out.println(jsonArray);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", 0);
         jsonObject.put("msg", "");
@@ -75,16 +75,17 @@ public class OrderService {
         if (status != null) {
             int statusInt = Integer.parseInt(status);
         }
-        // time参数 2019-12-04 - 2020-01-02 将其分割为两部分 。  数据库的时间截取为相同形式
-        String startTime = null;
-        String endTime = null;
-        if (time != null) {
-            int index = time.indexOf("-", 9);
-            startTime = time.substring(0, index).trim();
-            endTime = time.substring(index+1).trim();
-        }
+        // time参数 2019-12-04 - 2020-01-02 。将其分割为两部分 。  数据库的时间截取为相同形式
+        int index = time==null?0:time.indexOf("-", 9);
+        String startTime = time==null?null:time.substring(0, index).trim();
+        String endTime = time==null?null:time.substring(index+1).trim();
+//        if (time != null) {
+//            int index = time.indexOf("-", 9);
+//            startTime = time.substring(0, index).trim();
+//            endTime = time.substring(index+1).trim();
+//        }
         List<Record> orderList = Db.find(Db.getSqlPara("order.queryOrderList", Kv.by("status", status).set("startTime", startTime).set("endTime", endTime).set("buyerName", buyerName)));
-      orderList.forEach((record)->{
+        orderList.forEach((record)->{
           int oid=record.getInt("oid");
           List<Record> orderItemList= Db.find(Db.getSqlPara("order.queryOrderItemList", Kv.by("oid",oid)));
           record.set("orderItemList",orderItemList);

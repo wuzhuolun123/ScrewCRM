@@ -120,23 +120,14 @@
                         </div>
                     </div>
                 </form>
-
-
-
-
             </div>
-
-
         </div>
-
 
         <div class="layui-footer">
             <select id="screwName0" lay-search lay-verify="required" lay-filter="select">
                 <option value="99999">9999</option>
-
             </select>
             <!-- 底部固定区域 -->
-
             © layui.com - 底部固定区域
         </div>
     </div>
@@ -145,7 +136,7 @@
     <script>
         //订单项下标
         var i = 1;
-        //添加订单项
+        //添加订单项函数
         function addOrderItem() {
             i++;
             var itemId = "orderItem" + i;
@@ -169,7 +160,6 @@
                     for (var index in res) {
                         var select = $("#screwName" + i).get(0);
                         select.add(new Option(res[index]));
-
                     }
                     //select节点添加完option  必须更新渲染才能显示新的select
                     layui.use('form', function () {
@@ -178,24 +168,24 @@
                     });
                 }
             });
-
+            //用js扩展dom树后，必须立即遍历一次才能在后面遍历元素
             $("div[name='orderItem']").each(function (i) {
 
             });
         }
-
+       //layui加载form模块
         layui.use('form', function () {
-            console.log("开始加载表单模块");
             var form = layui.form;
 
+            //form监听产品选择框
             form.on('select(select)', function (data) {
                 //console.log(data.elem); //得到select原始DOM对象
                 // console.log(data.value); //得到被选中的值
                 // console.log(data.othis); //得到美化后的DOM对象
+
                 var name = data.elem.options[data.elem.selectedIndex].innerHTML;
                 // 根据当前select元素 剪切出i值 
                 var index = $(data.elem).attr("id").substr(9);
-                // console.log(index);
                 $.ajax({
                     url: '/screw/getScrewPrice',
                     data: { name: name },
@@ -205,67 +195,43 @@
                     }
                 });
             });
-            // form.on('radio(radio)', function (data) {
-            //     // console.log(data.elem); //得到radio原始DOM对象
-            //     // console.log(data.value); //被点击的radio的value值
-
-            // });
-            //表单提交函数
+           
+            //form监听提交
             form.on('submit(*)', function (data) {
-                alert("监听到提交");
-                //初始表单数据
-                // var finalData = data.field;
-                // console.log(data.field);
-                //orderItems数组为finalData的orderItems键的值
-                //  {oi:[{单价：，数量：，总价：},{}],买家：，状态：，备注：}
                 var finalData = new Object();
                 var orderItemsArray = new Array();
 
-                alert("制作数据之前");
-                //遍历所有orderItem元素，封装成一个对象，最后加入orderItems数组中
+                //开始制作订单数据
+                //数据格式： {订单项：[{产品名：,单价：,数量：,总价：,},{...}],买家：,备注：,状态：}
+
+                //遍历所有orderItem元素，封装成orderItem对象，最后加入orderItemsArray数组中
                 $("div[name='orderItem']").each(function (i) {
-                    //    alert("开始制作数据");
                     //第i个订单项
                     var index = i + 1;
 
-                    // 取不到该select控件？
                     var select = $("#screwName" + index).get(0);
-                    console.log(select);
-
-                    //    console.log("1");
-                    // var screwName = select.options[select.selectedIndex].innerHTML;
+                    //  console.log(select);  打印出是空值？但取得到值
                     var name = select.options[select.selectedIndex].innerHTML;
-                    //   console.log("2");
-
                     var price = $("#price" + index).val();
-                    //   console.log("3");
                     var num = $("#num" + index).val();
                     var totalPrice = $("#totalPrice" + index).val();
-                    //每个orderItem对象 加入属性键值对。
-                    var orderItem = { screwName: name, price: price, num: num, totalPrice: totalPrice };
-                    // 再把orderItem对象加入orderItemsArray数组，该数组为finalData对象orderItems键的值
-                    orderItemsArray[i] = orderItem;
 
-                    //   alert("完成制作数据");
+                    //组装每个orderItem对象 
+                    var orderItem = { screwName: name, price: price, num: num, totalPrice: totalPrice };
+                    // 再把orderItem对象加入orderItemsArray数组
+                    orderItemsArray[i] = orderItem;
                 });
 
-                //  alert("断点1");
+                //再将orderItemsArray赋值给finalData对象的orderItems键
                 finalData.orderItems = orderItemsArray;
-                //  alert("断点2");
                 var buyer = $("#buyerName").get(0);
-                //   console.log(buyer);
-                //  alert("断点3");
+                //给finalData赋值买家、状态、备注等信息
                 finalData.buyerName = buyer.options[buyer.selectedIndex].innerHTML;
-
-                //  finalData.status = $("#status").val();
                 finalData.remark = $("#remark").val();
-
-                console.log($(":input:checked").val());
                 finalData.status = $(":input:checked").val();
 
+                console.log($(":input:checked").val());
                 console.log(finalData);
-                //  alert("ajax前");
-
 
                 $.ajax({
                     url: '/order/addOrSaveOrder',
@@ -273,75 +239,60 @@
                     data: JSON.stringify(finalData),
                     contentType: 'application/json',
                     success: function (res) {
-                        alert("1");
                         console.log(res);
-
-                        alert("2");
-                        setTimeout(function () { window.location.href = '/admin/' }, 1000);
+                        alert("1");
+                        //这里有问题
                         layer.msg('添加订单成功', { icon: 1, zIndex: 99999999, time: 2000 });
-                        alert("3");
-
+                        setTimeout(function () { window.location.href = '/admin/' }, 1000);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         alert("失败");
                     }
                 });
-                //阻止表单跳转
-                //   return false;
+
             });
 
-         
 
         });
-        //表单模块加载结束
-   //给订单项总价赋值
-   $(function () {
-                //给多个数量栏绑定input事件  on比bind可以多一个子元素选择器
-                // input事件?
-                //数量栏
-                $(".oninput").on("input", function (e) {
-                    console.log("进入函数");
-                    var num = $(this).val();
-                    //第几个订单项的下标
-                    var index = $(this).attr("id").substr(3);
-                    //      console.log(index);
-                    var price = $("#price" + index).val();
+       
 
-                    if (price.length != 0 && num.length != 0) {
-                        console.log("进入if语句");
-                        var totalPrice = price * num;
-                        $("#totalPrice" + index).val(totalPrice);
-                    }
-                    // //获取input输入的值 e.delegateTarget.value等同于this
-                    // console.log(e.delegateTarget.value);
-                });
+        //给单个订单项总价赋值
+        $(function () {
+            //给多个数量栏绑定input事件     on()能绑定到动态控件中,bind不行
+            $(".oninput").on("input", function (e) {
+                console.log("开始运行");
+                var num = $(this).val();
+                //index:第index个订单项的下标
+                var index = $(this).attr("id").substr(3);
+                var price = $("#price" + index).val();
+
+                if (price.length != 0 && num.length != 0) {
+                    var totalPrice = price * num;
+                    $("#totalPrice" + index).val(totalPrice);
+                }
+                // //获取input输入的值 e.delegateTarget.value等同于this
+                // console.log(e.delegateTarget.value);
             });
-
-
-        function postForm() {
-
-        }
-
-
+        });
 
         $(document).ready(function () {
             console.log("开始页面加载");
-            //进入页面时给第一个产品框赋值。新增订单项后也要给对应select框赋值
+            //给第一个产品框赋值
             $.ajax({
                 url: '/screw/getScrewNameList',
                 success: function (res) {
-                    console.log(res);
+                    //  console.log(res);
                     for (var i in res) {
                         var select = $("#screwName1").get(0);
                         select.add(new Option(res[i]));
                     }
                 }
             });
-            //进入页面时给买家选择框赋值买家信息
+            //给买家选择框赋值
             $.ajax({
                 url: '/buyer/getBuyerNameList',
                 success: function (res) {
-                    //  console.log(res);
+                    console.log(res);
                     var select = $("#buyerName").get(0);
                     for (var i in res) {
                         select.add(new Option(res[i]));

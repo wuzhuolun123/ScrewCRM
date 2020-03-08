@@ -1,10 +1,18 @@
 package com.screw.erp.fore;
 
 import com.jfinal.core.Controller;
+import com.jfinal.core.JFinal;
 
 public class ForeController extends Controller{
+    public void logout(){render("/fore/login/login.html");}
     public void index(){
+        System.out.println("1111111");
+
         render("/fore/homePage.html");
+
+    }
+    public  void register(){
+        render("/fore/register/register.html");
     }
     public void addOrderPage(){
         render("/fore/addOrderPage.html");
